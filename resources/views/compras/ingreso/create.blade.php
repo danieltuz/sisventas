@@ -129,6 +129,7 @@
 
 @push('scripts')
 	<script>
+
 		function limpiar() {
 			$("#pcantidad").val("");
             $("#pprecio_compra").val("");
