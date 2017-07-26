@@ -2,7 +2,7 @@
 @section ('contenido')
 	<div class="row">
 		<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-			<h3>Nuevo Ingreso</h3>
+			<h3>Nueva Venta</h3>
 			@if (count($errors)>0)
 			<div class="alert alert-danger">
 				<ul>
@@ -14,13 +14,13 @@
 			@endif
 		</div>
 	</div>
-			{!!Form::open(array('url'=>'compras/ingreso','method'=>'POST','autocomplete'=>'off'))!!}
+			{!!Form::open(array('url'=>'ventas/venta','method'=>'POST','autocomplete'=>'off'))!!}
             {{Form::token()}}
 	<div class="row">
 		<div class="col-lg-12 col-sm-12 col-md-12 col-xs-12">
 			<div class="form-group">
-				<label for="proveedor">Proveedor</label>
-				<select name="idproveedor" id="idproveedor" class="form-control selectpicker" id="idproveedor" data-live-search="true">>
+				<label for="cliente">Cliente</label>
+				<select name="idcliente" id="idcliente" class="form-control selectpicker" id="idproveedor" data-live-search="true">>
 					@foreach($personas as $persona)
 						<option value="{{$persona->idpersona}}">{{$persona->nombre}}</option>
 					@endforeach
@@ -57,9 +57,9 @@
 				<div class="col-lg-4 col-sm-4 col-md-4 col-xs-12">
 					<div class="form-group">
 						<label>Articulo</label>
-						<select name="pidearticulo" class="form-control selectpicker" id="pidarticulo" data-live-search="true">
+						<select name="pidearticulo" class="form-control selectpicker" id="pidearticulo" data-live-search="true">
 							@foreach($articulos as $articulo)
-								<option value="{{$articulo->idarticulo}}">
+								<option value="{{$articulo->idarticulo}}_{{$articulo->stock}}_{{$articulo->precio_promedio}}">
 									{{$articulo->articulo}}
 								</option>
 							@endforeach
@@ -74,14 +74,20 @@
 				</div>
 				<div class="col-lg-2 col-sm-2 col-md-2 col-xs-12">
 					<div class="form-group">
-						<label>Precio de Compra</label>
-						<input type="number" name="pprecio_compra" id="pprecio_compra" class="form-control" placeholder="Precio de compra">
+						<label>Stock</label>
+						<input type="number" disabled name="pstock" id="pstock" class="form-control" placeholder="Stock">
 					</div>
 				</div>
 				<div class="col-lg-2 col-sm-2 col-md-2 col-xs-12">
 					<div class="form-group">
 						<label>Precio de Venta</label>
-						<input type="number" name="pprecio_venta" id="pprecio_venta" class="form-control" placeholder="Precio de venta">
+						<input type="number" disabled name="pprecio_venta" id="pprecio_venta" class="form-control" placeholder="Precio de venta">
+					</div>
+				</div>
+				<div class="col-lg-2 col-sm-2 col-md-2 col-xs-12">
+					<div class="form-group">
+						<label>Descuento</label>
+						<input type="number" name="pdescuento" id="pdescuento" class="form-control" placeholder="Descuento">
 					</div>
 				</div>
 				<div class="col-lg-2 col-sm-2 col-md-2 col-xs-12">
@@ -95,8 +101,8 @@
 						<th>Opciones</th>
 						<th>Artículo</th>
 						<th>Cantidad</th>
-						<th>Precio Compra</th>
-						<th>Precio venta</th>
+						<th>Precio Venta</th>
+						<th>Descuento</th>
 						<th>Subtotal</th>
 						</thead>
 						<tfoot>
@@ -105,7 +111,7 @@
 						<th></th>
 						<th></th>
 						<th></th>
-						<th><h4 id="total">S./ 0.00</h4></th>
+						<th><h4 id="total">S./ 0.00</h4> <input type="hidden" name="total_venta" id="total_venta"></th>
 						</tfoot>
 						<tbody>
 
@@ -143,6 +149,13 @@
 		subtotal=[];
 
 		$("#guardar").hide();
+		$("#pidearticulo").change(mostrarValores);
+
+		function mostrarValores() {
+			datosArticulo=document.getElementById('pidarticulo').value.split('_');
+			$("#pprecio_venta").val(datosArticulo[2]);
+			$("#pstock").val(datosArticulo[1]);
+        }
 
 		function agregar() {
 			idaraticulo=$("#pidarticulo").val();
