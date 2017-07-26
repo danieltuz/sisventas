@@ -147,6 +147,11 @@
 			$("#guardar").hide();
 		}
     }
+    
+    function gurda() {
+		
+    }
 	</script>
+	
 @endpush
 @endsection
